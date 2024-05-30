@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EventPlanner</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_header_events_fragment">Мероприятия</string>
+    <string name="text_btn_create_event">Создать</string>
+</resources>
