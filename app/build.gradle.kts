@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-kapt")
+    id("kotlin-android")
 }
 
 android {
@@ -41,6 +42,10 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
+    kapt {
+        generateStubs = true
+    }
 }
 
 dependencies {
@@ -62,7 +67,7 @@ dependencies {
     //Room(for database)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    //ksp(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 
     //Navigation component
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -71,8 +76,17 @@ dependencies {
     //Network
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.converter.scalars)
+    implementation(libs.okhttp)
 
     //Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
+
+    // Dagger 2
+    implementation(libs.dagger)
+    implementation(libs.dagger.android)
+    implementation(libs.dagger.android.support)
+    kapt(libs.dagger.compiler)
+    kapt(libs.dagger.android.processor)
 }

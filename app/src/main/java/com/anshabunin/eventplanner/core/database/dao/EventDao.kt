@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.Flow
 interface EventDao {
 
     @Query("SELECT * FROM event")
-    fun getListFlow(): Flow<List<EventEntity>?>
+    fun getEventsList(): Flow<List<EventEntity>?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertEvent(event: EventEntity)
+    fun insertEvent(event: EventEntity): Long
 
     @Query("DELETE FROM event WHERE id = :eventId")
-    fun deleteEventById(eventId: Int)
+    fun deleteEventById(eventId: Int): Int
 
     @Update
-    fun updateEvent(event: EventEntity)
+    fun updateEvent(event: EventEntity): Int
 }

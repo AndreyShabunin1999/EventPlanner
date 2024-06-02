@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="accent">#CC5FFF</color>
+    <color name="accent_hover">#BF4AF7</color>
+    <color name="accent_focus">#BF4AF6</color>
+    <color name="disabled_accent">#66CC5FFF</color>
+    <color name="neutral_hover">#F9F9F9</color>
+    <color name="divider_primary">#EBEBEB</color>
 </resources>

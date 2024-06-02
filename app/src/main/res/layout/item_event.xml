@@ -25,7 +25,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
-        android:id="@+id/eventSubtitle"
+        android:id="@+id/eventTown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Event Subtitle"
@@ -34,7 +34,7 @@
         android:textColor="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/eventTime"
+        android:id="@+id/eventDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Event Time"

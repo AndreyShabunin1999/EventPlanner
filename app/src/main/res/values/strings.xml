@@ -4,4 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_header_events_fragment">Мероприятия</string>
     <string name="text_btn_create_event">Создать</string>
+    <string name="hotels_empty_list">Список пуст</string>
+    <string name="text_tabitem_upcoming">Предстоящие</string>
+    <string name="text_tabitem_attened">Посещенные</string>
+    <string name="text_tabitem_missed">Пропущенные</string>
 </resources>
