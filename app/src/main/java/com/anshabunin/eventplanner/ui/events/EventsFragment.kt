@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import com.anshabunin.eventplanner.databinding.FragmentEventsBinding
@@ -141,6 +143,10 @@ class EventsFragment : Fragment(), Injectable {
             recyclerViewUpcoming.adapter = adapterUpcoming
             recyclerViewAttended.adapter = adapterAttended
             recyclerViewMissed.adapter = adapterMissed
+
+            createButton.setOnClickListener {
+                findNavController().navigate(EventsFragmentDirections.openCreateEventFragment())
+            }
         }
         tabListener()
 

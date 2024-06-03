@@ -8,7 +8,7 @@ import com.anshabunin.eventplanner.core.data.model.EventStatus
 @Entity(tableName = "event")
 data class EventEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    var id: Int = 0,
     @ColumnInfo
     val title: String,
     @ColumnInfo

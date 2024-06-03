@@ -8,4 +8,17 @@
     <string name="text_tabitem_upcoming">Предстоящие</string>
     <string name="text_tabitem_attened">Посещенные</string>
     <string name="text_tabitem_missed">Пропущенные</string>
+    <string name="text_btn_save">Сохранить</string>
+    <string name="text_title_create_fragment">Создание мероприятия</string>
+    <string name="text_desc_back">back</string>
+    <string name="text_title">Название</string>
+    <string name="text_date">Дата</string>
+    <string name="text_time">Время</string>
+    <string name="text_city">Город</string>
+    <string name="text_description">Описание</string>
+    <string name="text_title_event_hint">Название мероприятия</string>
+    <string name="text_date_event_hint">Введите дату</string>
+    <string name="text_event_time_hint">Введите время</string>
+    <string name="text_event_city_hint">Введите город</string>
+    <string name="text_event_description_hint">Введите описание</string>
 </resources>

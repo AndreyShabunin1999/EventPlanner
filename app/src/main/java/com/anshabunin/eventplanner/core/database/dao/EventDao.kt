@@ -1,6 +1,7 @@
 package com.anshabunin.eventplanner.core.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -12,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 interface EventDao {
 
     @Query("SELECT * FROM event")
-    fun getEventsList(): Flow<List<EventEntity>?>
+    fun getEventsList(): Flow<List<EventEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertEvent(event: EventEntity): Long
+    suspend fun insertEvent(event: EventEntity): Long
 
-    @Query("DELETE FROM event WHERE id = :eventId")
-    fun deleteEventById(eventId: Int): Int
+    @Delete
+    suspend fun deleteEvent(event: EventEntity): Int
 
     @Update
-    fun updateEvent(event: EventEntity): Int
+    suspend fun updateEvent(event: EventEntity): Int
 }

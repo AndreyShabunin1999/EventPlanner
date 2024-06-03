@@ -1,27 +1,25 @@
 package com.anshabunin.eventplanner.ui.events
 
+import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import com.anshabunin.eventplanner.domain.repository.EventRepository
-import com.anshabunin.hotelsapplication.core.domain.model.Resource
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EventsViewModel(
-    private val eventRepository: EventRepository,
+    private val eventRepository: EventRepository
 ) : ViewModel() {
 
     private val _events = MutableStateFlow<List<EventEntity>>(emptyList())
@@ -38,77 +36,84 @@ class EventsViewModel(
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     init {
-        var event = EventEntity(1, "ДР", "Туса у Олега", "22.08.2024", "Фрунзе 3, кв 38","Санкт-Петербург", "", EventStatus.ATTENDED)
-        insertEvent(event)
-        getEvents()
+
+        var event = EventEntity(
+            id = 4,
+            title =  "1 сентября",
+            description = "Туса у Андрея",
+            date = "22.08.2026",
+            location = "Фрунзе 4, кв 39",
+            city = "Москва",
+            imageUrl = "gg",
+            status = EventStatus.ATTENDED)
+
+        //updateEvent(event)
+
+        //removeEvent(event)
+
+        //insertEvent(event)
+
+        //getEvents()
     }
 
-    private fun getEvents(): Flow<List<EventEntity>?> = flow {
+    fun getEvents() {
         try {
-            setLoading(true)
-            val dataFlow = withContext(Dispatchers.IO) {
-                eventRepository.getEvents()
-            }
-            dataFlow.collect { data ->
-                if (!data.isNullOrEmpty()) {
-                    _events.value = data
-                    Log.e("ERRROR", data.toString())
+            viewModelScope.launch {
+                eventRepository.getEvents().flowOn(Dispatchers.IO).collect { events: List<EventEntity> ->
+                    Log.e("ERROR", events.toString())
+                    _events.value = events
                 }
             }
         } catch (e: Exception) {
-        } finally {
-            setLoading(false)
+            Log.e("ERROR", events.toString())
         }
+
     }
 
-
-    fun update(event: EventEntity): Flow<Resource<Unit>> = flow {
-        try {
-            val rowsAffected = withContext(Dispatchers.IO) {
-                eventRepository.updateEvent(event)
-            }
-            if (rowsAffected > 0) {
-                //emit(Resource.success(Unit))
-            } else {
-                //emit(Resource.error("Failed to update event", null))
+    fun insertEvent(event: EventEntity) {
+        try{
+            viewModelScope.launch(Dispatchers.IO) {
+                val insertedRowId = eventRepository.insertEvent(event)
+                if (insertedRowId != -1L) {
+                    Log.e("SUCCESS", "Event inserted with ID: $insertedRowId")
+                } else {
+                    Log.e("ERROR", "Failed to insert event")
+                }
             }
         } catch (e: Exception) {
-            //emit(Resource.error("An error occurred", null))
+            Log.e("ERROR", events.toString())
         }
     }
 
-    fun deleteEvent(idEvent: Int): Flow<Resource<Unit>> = flow {
-        try {
-            val rowsAffected = withContext(Dispatchers.IO) {
-                eventRepository.deleteEvent(idEvent)
-            }
-            if (rowsAffected > 0) {
-                //emit(Resource.success(Unit))
-            } else {
-                //emit(Resource.error("Failed to update event", null))
+    fun removeEvent(event: EventEntity) {
+        try{
+            viewModelScope.launch(Dispatchers.IO) {
+                val rowsAffected = eventRepository.deleteEvent(event)
+                if (rowsAffected > 0) {
+                    Log.e("SUCCESS", "Event deleted")
+                } else {
+                    Log.e("ERROR", "Failed to delete event")
+                }
             }
         } catch (e: Exception) {
-            //emit(Resource(ResourceState.ERROR))
-        } finally {
-            //emit(Resource.error("An error occurred", null))
+            Log.e("ERROR", events.toString())
         }
     }
 
-    fun insertEvent(event: EventEntity): Flow<Resource<Unit>> = flow {
+    fun updateEvent(event: EventEntity) {
         try {
-            val insertedRowId = withContext(Dispatchers.IO) {
-                eventRepository.insertEvent(event)
-            }
-            if (insertedRowId != -1L) {
-                //emit(Resource.success(Unit))
-            } else {
-                //emit(Resource.error("Failed to insert event", null))
+            viewModelScope.launch(Dispatchers.IO) {
+                val rowsAffected = eventRepository.updateEvent(event)
+                if (rowsAffected > 0) {
+                    Log.e("SUCCESS", "Event updated")
+                } else {
+                    Log.e("ERROR", "Failed to update event")
+                }
             }
         } catch (e: Exception) {
-            //emit(Resource.error("An error occurred", null))
+            Log.e("ERROR", events.toString())
         }
     }
-
 
     private fun setLoading(value: Boolean) {
         _isLoading.postValue(value)

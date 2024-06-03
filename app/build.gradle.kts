@@ -89,4 +89,7 @@ dependencies {
     implementation(libs.dagger.android.support)
     kapt(libs.dagger.compiler)
     kapt(libs.dagger.android.processor)
+
+    // spinner
+    implementation(libs.powerspinner)
 }
