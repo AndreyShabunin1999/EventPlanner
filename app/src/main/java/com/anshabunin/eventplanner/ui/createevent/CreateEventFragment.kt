@@ -13,9 +13,13 @@ import com.anshabunin.eventplanner.databinding.FragmentCreateEventBinding
 import com.anshabunin.eventplanner.di.Injectable
 import com.anshabunin.eventplanner.domain.repository.EventRepository
 import android.app.ActionBar.LayoutParams
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import com.anshabunin.eventplanner.utils.DatePickerHelper
 import com.anshabunin.eventplanner.utils.TimePickerHelper
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateEventFragment : Fragment(), Injectable {
@@ -37,10 +41,17 @@ class CreateEventFragment : Fragment(), Injectable {
     ): View? {
         binding = FragmentCreateEventBinding.inflate(inflater, container, false)
 
+        binding.apply {
+            lifecycleOwner = this@CreateEventFragment
+            data = viewModel
+        }
+
         binding.backButton.setOnClickListener { findNavController().popBackStack() }
 
         binding.etEventDate.setOnClickListener { showDatePickerDialog() }
         binding.etEventTime.setOnClickListener { showTimePickerDialog() }
+
+        binding.saveButton.setOnClickListener { insertEvent() }
 
         datePicker = context?.let { DatePickerHelper(it) }!!
         timePicker = context?.let { TimePickerHelper(it) }!!
@@ -49,13 +60,26 @@ class CreateEventFragment : Fragment(), Injectable {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch {
+            viewModel.insertEventResult.collect { result ->
+                result?.let {
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     private fun showDatePickerDialog() {
         datePicker.showDatePickerWithAgeLimit(object : DatePickerHelper.Callback {
             override fun onDateSelected(dayOfMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
                 val monthStr = if (month < 10) "0$month" else "$month"
-                binding.etEventDate.setText("$dayStr.$monthStr.$year")
-                viewModel.eventDate.set("$dayStr.$monthStr.$year")
+                val dateStr = getString(R.string.date_format, dayStr, monthStr, year)
+                binding.etEventDate.setText(dateStr)
+                viewModel.eventDate.set(dateStr)
             }
         })
     }
@@ -63,11 +87,61 @@ class CreateEventFragment : Fragment(), Injectable {
     private fun showTimePickerDialog() {
         timePicker.showTimePicker(object : TimePickerHelper.Callback {
             override fun onTimeSelected(hourOfDay: Int, minute: Int) {
-                binding.etEventTime.setText("$hourOfDay:$minute")
-                viewModel.eventTime.set("$hourOfDay:$minute")
+                val timeStr = getString(R.string.time_format, hourOfDay, minute)
+                binding.etEventTime.setText(timeStr)
+                viewModel.eventTime.set(timeStr)
             }
         })
     }
+
+    private fun insertEvent() {
+        val title = viewModel.eventTitle.get()
+        val description = viewModel.eventDescription.get()
+        val date = viewModel.eventDate.get()
+        val time = viewModel.eventTime.get()
+        val location = viewModel.eventLocation.get()
+        val city = viewModel.eventCity.get()
+
+        if (title.isNullOrEmpty()) {
+            showError(getString(R.string.error_title_empty))
+            return
+        }
+        if (description.isNullOrEmpty()) {
+            showError(getString(R.string.error_description_empty))
+            return
+        }
+        if (date.isNullOrEmpty()) {
+            showError(getString(R.string.error_date_empty))
+            return
+        }
+        if (time.isNullOrEmpty()) {
+            showError(getString(R.string.error_time_empty))
+            return
+        }
+        if (location.isNullOrEmpty()) {
+            showError(getString(R.string.error_location_empty))
+            return
+        }
+        if (city.isNullOrEmpty()) {
+            showError(getString(R.string.error_city_empty))
+            return
+        }
+
+        val event = EventEntity(
+            title = title,
+            description = description,
+            date = "$date $time",
+            location = location,
+            city = city
+        )
+        viewModel.insertEvent(event)
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+
 
     private fun prepare() {
         val cityAdapter = context?.let {

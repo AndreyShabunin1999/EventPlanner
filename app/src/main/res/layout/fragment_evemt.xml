@@ -1,0 +1,274 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.anshabunin.eventplanner.ui.event.EventViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/backButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:paddingVertical="8dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="12dp"
+                        android:src="@drawable/ic_back"
+                        android:contentDescription="@string/text_desc_back" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_event"
+                        android:layout_centerInParent="true"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center" />
+
+                </RelativeLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgEvent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/event_test"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/title_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="@{data.event.title}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/imgEvent"
+                        tools:text="Танцы на Невском проспекте" />
+
+                    <TextView
+                        android:id="@+id/tv_event_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_description"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/title_event"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/et_event_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black"
+                        tools:hint="Танцы танцы тоооолько танцы"
+                        android:text="@{data.event.description}"
+                        android:background="@drawable/edittext_grey_border"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_name_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:clickable="false"
+                        android:inputType="textAutoComplete"/>
+
+                    <TextView
+                        android:id="@+id/tv_event_cty_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_city"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/et_event_description"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/et_event_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black"
+                        tools:hint="Москва"
+                        android:text="@{data.event.city}"
+                        android:background="@drawable/edittext_grey_border"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_cty_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:clickable="false"
+                        android:inputType="textAutoComplete"/>
+
+                    <TextView
+                        android:id="@+id/tv_event_address_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_location"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/et_event_city"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/et_event_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black"
+                        tools:hint="Невский проспект 52"
+                        android:text="@{data.event.location}"
+                        android:background="@drawable/edittext_grey_border"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_address_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:clickable="false"
+                        android:inputType="textAutoComplete"/>
+
+                    <TextView
+                        android:id="@+id/tv_event_date_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_date"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/et_event_location"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/et_event_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black"
+                        tools:hint="23.08.2024"
+                        android:text="@{data.eventDate}"
+                        android:background="@drawable/edittext_grey_border"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_date_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:clickable="false"
+                        android:inputType="textAutoComplete"/>
+
+                    <TextView
+                        android:id="@+id/tv_event_time_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_time"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/et_event_date"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/et_event_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black"
+                        tools:hint="23.08.2024"
+                        android:text="@{data.eventTime}"
+                        android:background="@drawable/edittext_grey_border"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_time_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:clickable="false"
+                        android:inputType="textAutoComplete"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/edit_button"
+                        style="@style/AccentButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/text_btn_change"
+                        app:layout_constraintTop_toBottomOf="@id/et_event_time"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/delete_button"
+                        style="@style/AccentButton"
+                        android:background="@color/red"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/text_btn_delete"
+                        app:layout_constraintTop_toBottomOf="@id/edit_button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                
+            </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/progressbar"
+            layout="@layout/view_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:visibility="gone" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

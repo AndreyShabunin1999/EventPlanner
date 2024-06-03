@@ -15,12 +15,16 @@ class EventRepositoryImpl(
         return appDatabase.eventDao().getEventsList()
     }
 
+    override fun getEvent(idEvent: Int): Flow<EventEntity> {
+        return appDatabase.eventDao().getEvent(idEvent)
+    }
+
     override suspend fun updateEvent(event: EventEntity): Int {
         return appDatabase.eventDao().updateEvent(event)
     }
 
-    override suspend fun deleteEvent(event: EventEntity): Int {
-        return appDatabase.eventDao().deleteEvent(event)
+    override suspend fun deleteEvent(idEvent: Int): Int {
+        return appDatabase.eventDao().deleteEvent(idEvent)
     }
 
     override suspend fun insertEvent(event: EventEntity): Long {

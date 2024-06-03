@@ -20,7 +20,7 @@ data class EventEntity(
     @ColumnInfo
     val city: String,
     @ColumnInfo
-    val imageUrl: String,
+    val imageUrl: String = "",
     @ColumnInfo
-    val status: EventStatus
+    val status: EventStatus = EventStatus.ATTENDED
 )

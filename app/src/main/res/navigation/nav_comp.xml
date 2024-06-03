@@ -13,10 +13,33 @@
         <action
             android:id="@+id/openCreateEventFragment"
             app:destination="@id/createEventFragment" />
+        <action
+            android:id="@+id/openEventFragment"
+            app:destination="@id/eventFragment" />
     </fragment>
     <fragment
         android:id="@+id/createEventFragment"
         android:name="com.anshabunin.eventplanner.ui.createevent.CreateEventFragment"
         android:label="fragment_create_event"
         tools:layout="@layout/fragment_create_event" />
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="com.anshabunin.eventplanner.ui.event.EventFragment"
+        android:label="EventFragment" >
+        <argument
+            android:name="idEvent"
+            app:argType="integer" />
+        <action
+            android:id="@+id/openEditEventFragment"
+            app:destination="@id/editEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editEventFragment"
+        android:name="com.anshabunin.eventplanner.ui.editevent.EditEventFragment"
+        android:label="fragment_edit_event"
+        tools:layout="@layout/fragment_edit_event" >
+        <argument
+            android:name="idEvent"
+            app:argType="integer" />
+    </fragment>
 </navigation>

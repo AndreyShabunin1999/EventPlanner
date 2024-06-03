@@ -56,43 +56,12 @@ class EventsViewModel(
         //getEvents()
     }
 
-    fun getEvents() {
+    fun getAllEvents() {
         try {
             viewModelScope.launch {
                 eventRepository.getEvents().flowOn(Dispatchers.IO).collect { events: List<EventEntity> ->
                     Log.e("ERROR", events.toString())
                     _events.value = events
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("ERROR", events.toString())
-        }
-
-    }
-
-    fun insertEvent(event: EventEntity) {
-        try{
-            viewModelScope.launch(Dispatchers.IO) {
-                val insertedRowId = eventRepository.insertEvent(event)
-                if (insertedRowId != -1L) {
-                    Log.e("SUCCESS", "Event inserted with ID: $insertedRowId")
-                } else {
-                    Log.e("ERROR", "Failed to insert event")
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("ERROR", events.toString())
-        }
-    }
-
-    fun removeEvent(event: EventEntity) {
-        try{
-            viewModelScope.launch(Dispatchers.IO) {
-                val rowsAffected = eventRepository.deleteEvent(event)
-                if (rowsAffected > 0) {
-                    Log.e("SUCCESS", "Event deleted")
-                } else {
-                    Log.e("ERROR", "Failed to delete event")
                 }
             }
         } catch (e: Exception) {

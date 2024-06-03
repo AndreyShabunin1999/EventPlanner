@@ -36,8 +36,8 @@ class EventsFragment : Fragment(), Injectable {
 
     private val eventsListener = object : EventsListener {
         override fun openEventDetail(idEvent: Int) {
-           // val action = HotelListFragmentDirections.openHotelDetailFragment(idEvent)
-         //   findNavController().navigate(action)
+            val action = EventsFragmentDirections.openEventFragment(idEvent)
+            findNavController().navigate(action)
         }
     }
 
