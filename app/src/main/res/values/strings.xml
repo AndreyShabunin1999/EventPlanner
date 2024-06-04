@@ -24,6 +24,7 @@
     <string name="text_input_location_address">Введите адрес</string>
     <string name="text_location">Адрес</string>
     <string name="error_title_empty">Название не может быть пустым</string>
+    <string name="error_status_empty">Статус не может быть пустым</string>
     <string name="error_description_empty">Описание не может быть пустым</string>
     <string name="error_date_empty">Дата не может быть пустым</string>
     <string name="error_time_empty">Время не может быть пустым</string>
@@ -33,9 +34,21 @@
     <string name="error_insert_event">Ошибка создания данных</string>
     <string name="success_remove_event">Данные успешно удалены</string>
     <string name="error_remove_event">Ошибка удаления данных</string>
+    <string name="success_update_event">Данные успешно обновлены</string>
+    <string name="error_update_event">Ошибка обновения данных</string>
     <string name="time_format">%02d:%02d</string>
     <string name="date_format">%1s.%2s.%d</string>
     <string name="text_event">Мероприятие</string>
     <string name="text_btn_change">Редактировать</string>
     <string name="text_btn_delete">Удалить</string>
+    <string name="text_btn_update">Обновить данные</string>
+    <string name="text_title_edit_fragment">Редактирование</string>
+    <string name="text_status_visit">Посещение</string>
+
+
+    <string-array name="status_visit">
+        <item>Пойду</item>
+        <item>Посетил</item>
+        <item>Пропустил</item>
+    </string-array>
 </resources>

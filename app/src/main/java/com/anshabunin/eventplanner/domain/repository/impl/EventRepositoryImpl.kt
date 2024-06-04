@@ -1,9 +1,12 @@
 package com.anshabunin.eventplanner.domain.repository.impl
 
-import android.util.Log
+import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.AppDatabase
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.domain.model.NetworkResult
 import com.anshabunin.eventplanner.data.remote.EventService
+import com.anshabunin.eventplanner.data.remote.handleApi
+import com.anshabunin.eventplanner.data.remote.model.ResponseWeatherData
 import com.anshabunin.eventplanner.domain.repository.EventRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -29,5 +32,13 @@ class EventRepositoryImpl(
 
     override suspend fun insertEvent(event: EventEntity): Long {
         return appDatabase.eventDao().insertEvent(event)
+    }
+
+    override suspend fun updateStatusEvent(idEvent: Int, eventStatus: EventStatus): Int {
+        return appDatabase.eventDao().updateStatusEvent(idEvent, eventStatus)
+    }
+
+    override suspend fun getWeather(city: String): NetworkResult<ResponseWeatherData>? {
+        return handleApi { eventService.getWeather(city) }
     }
 }

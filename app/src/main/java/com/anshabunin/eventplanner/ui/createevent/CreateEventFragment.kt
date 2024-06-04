@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import com.anshabunin.eventplanner.utils.DatePickerHelper
 import com.anshabunin.eventplanner.utils.TimePickerHelper
+import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -66,7 +67,11 @@ class CreateEventFragment : Fragment(), Injectable {
         lifecycleScope.launch {
             viewModel.insertEventResult.collect { result ->
                 result?.let {
-                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    val message = when(it) {
+                        is ResourceState.SUCCESS -> getString(R.string.success_insert_event)
+                        else -> getString(R.string.error_insert_event)
+                    }
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -140,8 +145,6 @@ class CreateEventFragment : Fragment(), Injectable {
     private fun showError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
-
 
     private fun prepare() {
         val cityAdapter = context?.let {

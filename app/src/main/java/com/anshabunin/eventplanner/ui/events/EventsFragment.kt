@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
@@ -17,6 +16,8 @@ import com.anshabunin.eventplanner.domain.repository.EventRepository
 import com.anshabunin.eventplanner.ui.events.adapter.EventAdapter
 import com.anshabunin.eventplanner.ui.events.adapter.EventsListener
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class EventsFragment : Fragment(), Injectable {
@@ -47,96 +48,6 @@ class EventsFragment : Fragment(), Injectable {
     ): View? {
         binding = FragmentEventsBinding.inflate(inflater, container, false)
 
-        // Создаем тестовые данные
-        val event3 = EventEntity(
-            id = 1,
-            title = "Событие 1",
-            description = "Описание события 1",
-            date = "01.07.2024",
-            location = "Место проведения 1",
-            city = "Город 1",
-            imageUrl = "URL_изображения_1",
-            status = EventStatus.MISSED
-        )
-        val event4 = EventEntity(
-            id = 2,
-            title = "Событие 2",
-            description = "Описание события 2",
-            date = "02.07.2024",
-            location = "Место проведения 2",
-            city = "Город 2",
-            imageUrl = "URL_изображения_2",
-            status = EventStatus.MISSED
-        )
-
-        val event5 = EventEntity(
-            id = 1,
-            title = "Событие 1",
-            description = "Описание события 1",
-            date = "01.07.2024",
-            location = "Место проведения 1",
-            city = "Город 1",
-            imageUrl = "URL_изображения_1",
-            status = EventStatus.MISSED
-        )
-        val event6 = EventEntity(
-            id = 2,
-            title = "Событие 2",
-            description = "Описание события 2",
-            date = "02.07.2024",
-            location = "Место проведения 2",
-            city = "Город 2",
-            imageUrl = "URL_изображения_2",
-            status = EventStatus.MISSED
-        )
-
-        val event7 = EventEntity(
-            id = 1,
-            title = "Событие 1",
-            description = "Описание события 1",
-            date = "01.07.2024",
-            location = "Место проведения 1",
-            city = "Город 1",
-            imageUrl = "URL_изображения_1",
-            status = EventStatus.MISSED
-        )
-        val event8 = EventEntity(
-            id = 2,
-            title = "Событие 2",
-            description = "Описание события 2",
-            date = "02.07.2024",
-            location = "Место проведения 2",
-            city = "Город 2",
-            imageUrl = "URL_изображения_2",
-            status = EventStatus.MISSED
-        )
-
-        val event1 = EventEntity(
-            id = 1,
-            title = "Событие 1",
-            description = "Описание события 1",
-            date = "01.07.2024",
-            location = "Место проведения 1",
-            city = "Город 1",
-            imageUrl = "URL_изображения_1",
-            status = EventStatus.MISSED
-        )
-        val event2 = EventEntity(
-            id = 2,
-            title = "Событие 2",
-            description = "Описание события 2",
-            date = "02.07.2024",
-            location = "Место проведения 2",
-            city = "Город 2",
-            imageUrl = "URL_изображения_2",
-            status = EventStatus.MISSED
-        )
-
-        // Добавляем тестовые данные в адаптер
-        adapterUpcoming.updateEvents(listOf(event1, event2, event3, event6,event4, event5, event7, event8, event1, event2, event3, event6,event4, event5, event7, event8))
-        adapterAttended.updateEvents(listOf(event4, event5, event7, event8))
-        adapterMissed.updateEvents(listOf())
-
         binding.apply {
             lifecycleOwner = this@EventsFragment
             data = viewModel
@@ -155,18 +66,12 @@ class EventsFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        viewModel.getTextFromService()
-        viewModel.getUpcomingEvents().onEach { adapterUpcoming.updateEvents(it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.getAttendedEvents().onEach { adapterAttended.updateEvents(it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.getMissedEvents().onEach { adapterMissed.updateEvents(it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-            
-         */
+        viewModel.events.onEach { events ->
+            adapterUpcoming.updateEvents(viewModel.getUpcomingEvents())
+            adapterAttended.updateEvents(viewModel.getAttendedEvents())
+            adapterMissed.updateEvents(viewModel.getMissedEvents())
+            viewModel.visibilityEmptyView.set(updateEmptyViewVisible(viewModel.selectedTab.value ?: 0))
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun tabListener() {

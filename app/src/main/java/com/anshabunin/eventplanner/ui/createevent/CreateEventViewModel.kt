@@ -13,6 +13,7 @@ import com.anshabunin.eventplanner.domain.repository.EventRepository
 import com.anshabunin.eventplanner.ui.events.EventsViewModel
 import com.anshabunin.eventplanner.utils.mapToList
 import com.anshabunin.eventplanner.utils.readJSONFromAssets
+import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,22 +42,20 @@ class CreateEventViewModel(
         }
     }
 
-    private val _insertEventResult = MutableStateFlow<String?>(null)
-    val insertEventResult: StateFlow<String?> = _insertEventResult
+    private val _insertEventResult = MutableStateFlow<ResourceState?>(null)
+    val insertEventResult: StateFlow<ResourceState?> = _insertEventResult
 
     fun insertEvent(event: EventEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val insertedRowId = eventRepository.insertEvent(event)
                 if (insertedRowId != -1L) {
-                    _insertEventResult.value = contextRef.get()
-                        ?.let { getString(it, R.string.success_insert_event) }
+                    _insertEventResult.value = ResourceState.SUCCESS
                 } else {
-                    _insertEventResult.value = contextRef.get()
-                        ?.let { getString(it, R.string.error_insert_event) } }
+                    _insertEventResult.value = ResourceState.ERROR
+                }
             } catch (e: Exception) {
-                _insertEventResult.value = contextRef.get()
-                    ?.let { getString(it, R.string.error_insert_event) }
+                _insertEventResult.value = ResourceState.ERROR
             }
         }
     }

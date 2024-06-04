@@ -22,5 +22,5 @@ data class EventEntity(
     @ColumnInfo
     val imageUrl: String = "",
     @ColumnInfo
-    val status: EventStatus = EventStatus.ATTENDED
+    val status: EventStatus = EventStatus.UPCOMING
 )

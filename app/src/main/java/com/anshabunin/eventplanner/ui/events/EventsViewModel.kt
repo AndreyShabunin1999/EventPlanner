@@ -1,6 +1,5 @@
 package com.anshabunin.eventplanner.ui.events
 
-import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class EventsViewModel(
     private val eventRepository: EventRepository
@@ -36,28 +34,12 @@ class EventsViewModel(
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     init {
-
-        var event = EventEntity(
-            id = 4,
-            title =  "1 сентября",
-            description = "Туса у Андрея",
-            date = "22.08.2026",
-            location = "Фрунзе 4, кв 39",
-            city = "Москва",
-            imageUrl = "gg",
-            status = EventStatus.ATTENDED)
-
-        //updateEvent(event)
-
-        //removeEvent(event)
-
-        //insertEvent(event)
-
-        //getEvents()
+        getAllEvents()
     }
 
-    fun getAllEvents() {
+    private fun getAllEvents() {
         try {
+            setLoading(true)
             viewModelScope.launch {
                 eventRepository.getEvents().flowOn(Dispatchers.IO).collect { events: List<EventEntity> ->
                     Log.e("ERROR", events.toString())
@@ -66,21 +48,8 @@ class EventsViewModel(
             }
         } catch (e: Exception) {
             Log.e("ERROR", events.toString())
-        }
-    }
-
-    fun updateEvent(event: EventEntity) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val rowsAffected = eventRepository.updateEvent(event)
-                if (rowsAffected > 0) {
-                    Log.e("SUCCESS", "Event updated")
-                } else {
-                    Log.e("ERROR", "Failed to update event")
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("ERROR", events.toString())
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -90,6 +59,18 @@ class EventsViewModel(
 
     fun updateSelectedTab(tabIndex: Int) {
         _selectedTab.value = tabIndex
+    }
+
+    fun getUpcomingEvents(): List<EventEntity> {
+        return _events.value.filter { it.status == EventStatus.UPCOMING }
+    }
+
+    fun getAttendedEvents(): List<EventEntity> {
+        return _events.value.filter { it.status == EventStatus.ATTENDED }
+    }
+
+    fun getMissedEvents(): List<EventEntity> {
+        return _events.value.filter { it.status == EventStatus.MISSED }
     }
 
     companion object {

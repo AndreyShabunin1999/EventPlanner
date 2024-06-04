@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -26,4 +27,7 @@ interface EventDao {
 
     @Update
     suspend fun updateEvent(event: EventEntity): Int
+
+    @Query("UPDATE event SET status = :eventStatus WHERE id = :idEvent")
+    fun updateStatusEvent(idEvent: Int, eventStatus: EventStatus): Int
 }
