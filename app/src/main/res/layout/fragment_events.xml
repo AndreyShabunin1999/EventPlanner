@@ -30,6 +30,7 @@
                 android:text="@string/text_header_events_fragment"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"/>
@@ -48,7 +49,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:clipToPadding="true"
-                android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,9 +60,8 @@
                 app:tabIndicatorHeight="4dp"
                 app:tabMode="fixed"
                 app:tabPaddingBottom="8dp"
-                app:tabPaddingEnd="16dp"
-                app:tabPaddingStart="16dp"
                 app:tabRippleColor="@null"
+                app:tabTextAppearance="@style/TabTextAppearance"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextColor="@color/black">
 
@@ -96,7 +95,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
@@ -111,7 +110,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
@@ -126,7 +125,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout" />

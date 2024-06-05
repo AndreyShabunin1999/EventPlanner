@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.anshabunin.eventplanner.core.data.model.EventStatus
+import com.anshabunin.eventplanner.utils.RANDOM_IMAGE
 
 @Entity(tableName = "event")
 data class EventEntity(
@@ -20,7 +21,7 @@ data class EventEntity(
     @ColumnInfo
     val city: String,
     @ColumnInfo
-    val imageUrl: String = "",
+    var imageUrl: String = RANDOM_IMAGE,
     @ColumnInfo
     val status: EventStatus = EventStatus.UPCOMING
 )

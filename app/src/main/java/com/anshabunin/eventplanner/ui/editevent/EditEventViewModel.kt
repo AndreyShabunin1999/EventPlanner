@@ -8,12 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
 import com.anshabunin.eventplanner.domain.repository.EventRepository
-import com.anshabunin.eventplanner.ui.events.EventsViewModel
 import com.anshabunin.eventplanner.utils.mapToList
 import com.anshabunin.eventplanner.utils.readJSONFromAssets
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +34,7 @@ class EditEventViewModel(
     val eventTime = ObservableField<String>()
     val eventLocation = ObservableField<String>()
     val eventDescription = ObservableField<String>()
+    val eventStatus = ObservableField<EventStatus>()
     val eventCity = ObservableField<String>()
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -76,11 +77,33 @@ class EditEventViewModel(
         }
         eventLocation.set(event.location)
         eventDescription.set(event.description)
+        eventStatus.set(event.status)
     }
 
     private fun setLoading(value: Boolean) {
         _isLoading.postValue(value)
     }
+
+    fun createAndUpdateEvent(
+        title: String,
+        description: String,
+        dateTime: String,
+        location: String,
+        city: String,
+        status: EventStatus
+    ) {
+        val event = EventEntity(
+            id = idEvent,
+            title = title,
+            description = description,
+            date = dateTime,
+            location = location,
+            city = city,
+            status = status
+        )
+        updateEvent(event)
+    }
+
 
     fun updateEvent(event: EventEntity) {
         try {
@@ -100,6 +123,9 @@ class EditEventViewModel(
         }
     }
 
+    fun clearValue(){
+        _updateEventResult.value = null
+    }
 
     companion object {
         fun factory(

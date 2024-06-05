@@ -39,6 +39,6 @@ class EventRepositoryImpl(
     }
 
     override suspend fun getWeather(city: String): NetworkResult<ResponseWeatherData>? {
-        return handleApi { eventService.getWeather(city) }
+        return handleApi{ eventService.getWeather(city) }
     }
 }

@@ -9,6 +9,7 @@ import com.anshabunin.eventplanner.R
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
 import com.anshabunin.eventplanner.databinding.ItemEventBinding
 import com.anshabunin.eventplanner.databinding.ViewEmptyListBinding
+import com.anshabunin.eventplanner.utils.binding.setLoadPhoto
 
 class EventAdapter(
     private val eventsListener: EventsListener
@@ -40,10 +41,10 @@ class EventAdapter(
                     eventTitle.text = event.title
                     eventTown.text = event.city
                     eventDateTime.text = event.date
+                    binding.eventImage.setLoadPhoto(event.imageUrl)
                 }
 
                 binding.root.setOnClickListener {
-                    Log.e("ERRROR", "Ты нажал на на ${event.title}")
                     eventsListener.openEventDetail(event.id)
                 }
             }

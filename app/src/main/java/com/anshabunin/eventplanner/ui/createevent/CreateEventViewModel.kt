@@ -1,19 +1,15 @@
 package com.anshabunin.eventplanner.ui.createevent
 
 import android.content.Context
-import android.util.Log
-import androidx.core.content.ContextCompat.getString
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.anshabunin.eventplanner.R
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
 import com.anshabunin.eventplanner.domain.repository.EventRepository
-import com.anshabunin.eventplanner.ui.events.EventsViewModel
 import com.anshabunin.eventplanner.utils.mapToList
 import com.anshabunin.eventplanner.utils.readJSONFromAssets
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,6 +54,10 @@ class CreateEventViewModel(
                 _insertEventResult.value = ResourceState.ERROR
             }
         }
+    }
+
+    fun clearValue(){
+        _insertEventResult.value = null
     }
 
 

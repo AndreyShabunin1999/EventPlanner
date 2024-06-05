@@ -2,8 +2,6 @@ package com.anshabunin.eventplanner.core.data.model
 
 import android.content.Context
 import com.anshabunin.eventplanner.R
-import java.util.Arrays
-
 
 enum class EventStatus {
     UPCOMING,

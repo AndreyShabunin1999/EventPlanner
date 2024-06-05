@@ -9,8 +9,7 @@ class DatePickerHelper(private val context: Context) {
     private var callback: Callback? = null
     private val listener =
         DatePickerDialog.OnDateSetListener { datePicker, year, monthOfYear, dayOfMonth ->
-            val month = if (year == Calendar.getInstance().get(Calendar.YEAR)) monthOfYear
-            else monthOfYear + 1
+            val month = monthOfYear + 1
             callback?.onDateSelected(dayOfMonth, month, year)
         }
 
@@ -23,19 +22,27 @@ class DatePickerHelper(private val context: Context) {
             cal.get(Calendar.MONTH),
             cal.get(Calendar.DAY_OF_MONTH)
         )
+
+        setMaxDate(getDateInMillis(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH) + 4))
         setMinDate(cal.time.time)
+    }
+
+    private fun getDateInMillis(year: Int, month: Int, day: Int): Long {
+        val cal = Calendar.getInstance()
+        cal.set(year, month - 1, day)
+        return cal.timeInMillis
     }
 
     fun showDialog(dayOfMonth: Int, month: Int, year: Int, callback: Callback?) {
         this.callback = callback
-        dialog.datePicker.init(year, month, dayOfMonth, null)
+        dialog.datePicker.init(year, month - 1, dayOfMonth, null)
         dialog.show()
     }
 
     fun showDatePickerWithAgeLimit(callback: Callback) {
         val cal = Calendar.getInstance()
         val initialDay = cal.get(Calendar.DAY_OF_MONTH)
-        val initialMonth = cal.get(Calendar.MONTH)
+        val initialMonth = cal.get(Calendar.MONTH) + 1
         val initialYear = cal.get(Calendar.YEAR)
 
         showDialog(initialDay, initialMonth, initialYear, callback)

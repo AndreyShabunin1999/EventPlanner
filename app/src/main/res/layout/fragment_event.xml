@@ -28,6 +28,7 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingVertical="16dp"
+                    android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -52,8 +53,7 @@
                         android:layout_centerInParent="true"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
+                        android:textColor="@color/black" />
 
                 </RelativeLayout>
             </com.google.android.material.appbar.AppBarLayout>
@@ -65,14 +65,17 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/imgEvent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/event_test"
+                        android:src="@drawable/placeholder"
+                        loadPhoto="@{data.event.imageUrl}"
                         app:layout_constraintTop_toTopOf="parent"
                         />
 
@@ -84,167 +87,143 @@
                         android:layout_marginVertical="10dp"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:text="@{data.event.title}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/imgEvent"
                         tools:text="Танцы на Невском проспекте" />
 
+                    <ImageView
+                        android:id="@+id/weatherIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_marginVertical="10dp"
+                        android:contentDescription="@string/app_name"
+                        app:layout_constraintTop_toBottomOf="@id/title_event"
+                        android:src="@drawable/weather_img"
+                        loadPhoto="@{data.weatherImage}"/>
+
+                    <LinearLayout
+                        android:id="@+id/overviewContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:weightSum="2"
+                        android:layout_marginHorizontal="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/weatherIcon">
+
+                        <TextView
+                            android:id="@+id/temp_min"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textAlignment="textStart"
+                            tools:text="мин. температура: 20°C"
+                            android:textColor="@color/black"
+                            android:text="@{@string/temperature_format_min(data.minTemp)}"/>
+
+                        <TextView
+                            android:id="@+id/temp_max"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textAlignment="textEnd"
+                            tools:text="макс. температура: 28°C"
+                            android:textColor="@color/black"
+                            android:text="@{@string/temperature_format_max(data.maxTemp)}"/>
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/tv_event_name_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_description"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
-                        app:layout_constraintTop_toBottomOf="@id/title_event"
+                        app:layout_constraintTop_toBottomOf="@id/overviewContainer"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <EditText
                         android:id="@+id/et_event_description"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/black"
+                        style="@style/EditTextStyleNotFocusable"
                         tools:hint="Танцы танцы тоооолько танцы"
                         android:text="@{data.event.description}"
-                        android:background="@drawable/edittext_grey_border"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_name_label"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginHorizontal="16dp"
                         android:lines="4"
-                        android:clickable="false"
-                        android:focusable="false"
                         android:inputType="textMultiLine"/>
 
                     <TextView
                         android:id="@+id/tv_event_cty_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_city"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
                         app:layout_constraintTop_toBottomOf="@id/et_event_description"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <EditText
                         android:id="@+id/et_event_city"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/black"
+                        style="@style/EditTextStyleNotFocusable"
                         tools:hint="Москва"
                         android:text="@{data.event.city}"
-                        android:background="@drawable/edittext_grey_border"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_cty_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:inputType="textAutoComplete"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_event_address_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_location"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
                         app:layout_constraintTop_toBottomOf="@id/et_event_city"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <EditText
                         android:id="@+id/et_event_location"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/black"
+                        style="@style/EditTextStyleNotFocusable"
                         tools:hint="Невский проспект 52"
                         android:text="@{data.event.location}"
-                        android:background="@drawable/edittext_grey_border"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_address_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:inputType="textAutoComplete"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_event_date_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_date"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
                         app:layout_constraintTop_toBottomOf="@id/et_event_location"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <EditText
                         android:id="@+id/et_event_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/black"
+                        style="@style/EditTextStyleNotFocusable"
                         tools:hint="23.08.2024"
                         android:text="@{data.eventDate}"
-                        android:background="@drawable/edittext_grey_border"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_date_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:inputType="textAutoComplete"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_event_time_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_time"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
                         app:layout_constraintTop_toBottomOf="@id/et_event_date"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <EditText
                         android:id="@+id/et_event_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/black"
+                        style="@style/EditTextStyleNotFocusable"
                         tools:hint="23.08.2024"
                         android:text="@{data.eventTime}"
-                        android:background="@drawable/edittext_grey_border"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_time_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:inputType="textAutoComplete"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_visit_event_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/CustomTextViewStyle"
                         android:text="@string/text_status_visit"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="10dp"
                         app:layout_constraintTop_toBottomOf="@id/et_event_time"
                         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -254,6 +233,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/edittext_border"
                         android:textSize="18sp"
+                        android:textColor="@color/black"
                         android:text="@={data.eventStatus}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -285,8 +265,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/delete_button"
-                        style="@style/AccentButton"
-                        android:background="@color/red"
+                        style="@style/RedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"

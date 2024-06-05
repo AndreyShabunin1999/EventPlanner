@@ -92,4 +92,8 @@ dependencies {
 
     // spinner
     implementation(libs.powerspinner)
+
+    //Glide
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 }

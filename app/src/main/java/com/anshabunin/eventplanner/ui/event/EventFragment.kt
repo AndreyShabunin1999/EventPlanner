@@ -13,11 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.anshabunin.eventplanner.R
 import com.anshabunin.eventplanner.core.data.model.getEnumStatus
-import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
 import com.anshabunin.eventplanner.databinding.FragmentEventBinding
 import com.anshabunin.eventplanner.di.Injectable
 import com.anshabunin.eventplanner.domain.repository.EventRepository
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -89,6 +88,10 @@ class EventFragment : Fragment(), Injectable {
                         else -> getString(R.string.error_remove_event)
                     }
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    if(it == ResourceState.SUCCESS) {
+                        findNavController().popBackStack()
+                    }
+
                 }
             }
         }
@@ -101,6 +104,7 @@ class EventFragment : Fragment(), Injectable {
                         else -> getString(R.string.error_update_event)
                     }
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    viewModel.clearUpdateResult()
                 }
             }
         }

@@ -72,6 +72,10 @@ class EventsFragment : Fragment(), Injectable {
             adapterMissed.updateEvents(viewModel.getMissedEvents())
             viewModel.visibilityEmptyView.set(updateEmptyViewVisible(viewModel.selectedTab.value ?: 0))
         }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.selectedTab.observe(viewLifecycleOwner) { tabIndex ->
+            binding.tabLayout.getTabAt(tabIndex)?.select()
+        }
     }
 
     private fun tabListener() {

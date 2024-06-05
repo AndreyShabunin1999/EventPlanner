@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.anshabunin.eventplanner.R
-import com.anshabunin.eventplanner.databinding.FragmentCreateEventBinding
 import com.anshabunin.eventplanner.di.Injectable
 import com.anshabunin.eventplanner.domain.repository.EventRepository
 import android.app.ActionBar.LayoutParams
@@ -17,9 +16,10 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
+import com.anshabunin.eventplanner.databinding.FragmentCreateEventBinding
 import com.anshabunin.eventplanner.utils.DatePickerHelper
 import com.anshabunin.eventplanner.utils.TimePickerHelper
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -72,6 +72,7 @@ class CreateEventFragment : Fragment(), Injectable {
                         else -> getString(R.string.error_insert_event)
                     }
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    viewModel.clearValue()
                 }
             }
         }

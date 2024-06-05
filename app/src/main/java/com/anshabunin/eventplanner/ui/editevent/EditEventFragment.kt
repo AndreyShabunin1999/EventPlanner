@@ -14,13 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.anshabunin.eventplanner.R
-import com.anshabunin.eventplanner.core.database.entity.EventEntity
+import com.anshabunin.eventplanner.core.data.model.EventStatus
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
 import com.anshabunin.eventplanner.databinding.FragmentEditEventBinding
 import com.anshabunin.eventplanner.di.Injectable
 import com.anshabunin.eventplanner.domain.repository.EventRepository
 import com.anshabunin.eventplanner.utils.DatePickerHelper
 import com.anshabunin.eventplanner.utils.TimePickerHelper
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -80,6 +80,7 @@ class EditEventFragment : Fragment(), Injectable {
                         else -> getString(R.string.error_update_event)
                     }
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    viewModel.clearValue()
                 }
             }
         }
@@ -140,15 +141,14 @@ class EditEventFragment : Fragment(), Injectable {
             return
         }
 
-        val event = EventEntity(
-            id = args.idEvent,
-            title = title,
-            description = description,
-            date = "$date $time",
-            location = location,
-            city = city
+        viewModel.createAndUpdateEvent(
+            title,
+            description,
+            "$date $time",
+            location,
+            city,
+            viewModel.eventStatus.get() ?: EventStatus.UPCOMING
         )
-        viewModel.updateEvent(event)
     }
 
     private fun showError(message: String) {

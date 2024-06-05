@@ -44,6 +44,9 @@
     <string name="text_btn_update">Обновить данные</string>
     <string name="text_title_edit_fragment">Редактирование</string>
     <string name="text_status_visit">Посещение</string>
+    <string name="temperature_format_min">мин. темп.: %1s°C</string>
+    <string name="temperature_format_max">макс. темп.: %1s°C</string>
+    <string name="image_format">%1s%2s.png</string>
 
 
     <string-array name="status_visit">

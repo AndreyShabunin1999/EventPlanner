@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="red">#C61414</color>
-    <color name="grey">#BCBCBC</color>
+    <color name="grey">#838282</color>
     <color name="white">#FFFFFFFF</color>
     <color name="accent">#CC5FFF</color>
     <color name="accent_hover">#BF4AF7</color>

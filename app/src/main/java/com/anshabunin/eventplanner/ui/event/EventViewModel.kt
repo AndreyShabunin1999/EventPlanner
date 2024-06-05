@@ -2,7 +2,6 @@ package com.anshabunin.eventplanner.ui.event
 
 import android.content.Context
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,19 +12,18 @@ import com.anshabunin.eventplanner.R
 import com.anshabunin.eventplanner.core.data.model.EventStatus
 import com.anshabunin.eventplanner.core.data.model.getValueStatus
 import com.anshabunin.eventplanner.core.database.entity.EventEntity
-import com.anshabunin.eventplanner.core.domain.model.onSuccess
+import com.anshabunin.eventplanner.core.domain.model.NetworkResult
+import com.anshabunin.eventplanner.core.domain.model.ResourceState
 import com.anshabunin.eventplanner.data.remote.model.ResponseWeatherData
 import com.anshabunin.eventplanner.domain.repository.EventRepository
-import com.anshabunin.hotelsapplication.core.domain.model.Resource
-import com.anshabunin.hotelsapplication.core.domain.model.ResourceState
+import com.anshabunin.eventplanner.utils.WEATHER_IMAGE
+import com.anshabunin.eventplanner.utils.convertDateFormat
+import com.anshabunin.eventplanner.utils.findNearestTime
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 class EventViewModel(
@@ -38,6 +36,10 @@ class EventViewModel(
     val eventDate = ObservableField<String>()
     val eventTime = ObservableField<String>()
     val eventStatus = ObservableField<String>()
+
+    val weatherImage = ObservableField<String>()
+    val minTemp = ObservableField<String>()
+    val maxTemp = ObservableField<String>()
 
     private val _weatherData = MutableStateFlow<ResponseWeatherData?>(null)
     val weatherData: StateFlow<ResponseWeatherData?> = _weatherData
@@ -61,14 +63,14 @@ class EventViewModel(
         try {
             setLoading(true)
             viewModelScope.launch {
-                eventRepository.getEvent(idEvent).flowOn(Dispatchers.IO).collect { eventEntity: EventEntity ->
-                    Log.e("ERRROR", event.toString())
-                    event.set(eventEntity)
-                    prepareEvent(eventEntity)
-                    Log.e("ERRROR", eventEntity.toString())
-                    //eventEntity.city?.let { getWeather(it) }
-                    //setLoading(false)
-                }
+                eventRepository.getEvent(idEvent).flowOn(Dispatchers.IO)
+                    .collect { eventEntity: EventEntity? ->
+                        eventEntity?.let {
+                            event.set(it)
+                            prepareEvent(it)
+                            getWeather(it.city)
+                        }
+                    }
             }
         } catch (e: Exception) {
             Log.e("ERRROR", e.message.toString())
@@ -76,6 +78,25 @@ class EventViewModel(
             setLoading(false)
         }
     }
+
+    private fun prepareWeather(weatherData: ResponseWeatherData){
+        val findData = eventDate.get()?.let { convertDateFormat(it) }
+        val nearestTime = eventTime.get()?.let { findNearestTime(it) }
+
+        val targetWeather = weatherData.list.find {
+            val fromListData = it.dtTxt?.split(" ")?.get(0)
+            val fromListTime = it.dtTxt?.split(" ")?.get(1)
+            (findData == fromListData) && (fromListTime == nearestTime)
+        }
+
+        targetWeather?.let {
+            weatherImage.set(contextRef.get()?.resources?.getString(R.string.image_format, WEATHER_IMAGE, it.weather[0].icon))
+            maxTemp.set(it.main?.tempMax?.let { tempMax -> kelvinToCelsius(tempMax).toString() })
+            minTemp.set(it.main?.tempMin?.let { tempMin -> kelvinToCelsius(tempMin).toString() })
+        }
+    }
+
+    private fun kelvinToCelsius(kelvin: Double): Int = (kelvin - 273.15).toInt()
 
     private fun prepareEvent(eventEntity: EventEntity){
         if(eventEntity.date.isNotEmpty() && eventEntity.date != ""){
@@ -103,24 +124,33 @@ class EventViewModel(
         }
     }
 
-    private fun getWeather(city: String): Flow<Resource<ResponseWeatherData>> = flow {
-        try {
-            val data = withContext(Dispatchers.IO) {
-                eventRepository.getWeather(city)
+    private fun getWeather(city: String) {
+        viewModelScope.launch {
+            try {
+                setLoading(true)
+                val result = eventRepository.getWeather(city)
+                when (result) {
+                    is NetworkResult.Success -> {
+                        _weatherData.value = result.data
+                        weatherData.value?.let { prepareWeather(it) }
+                    }
+                    is NetworkResult.ErrorServer -> {
+                        Log.e("Weather", "Error: ${result.msg}")
+                    }
+                    is NetworkResult.Exception -> {
+                        Log.e("Weather", "Exception: ${result.e}")
+                    } else -> {
+                        Log.e("Weather", "Error")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("Weather", "Exception: ${e.message}")
+            } finally {
+                setLoading(false)
             }
-            data?.onSuccess {
-                _weatherData.value = it
-                Log.e("ERRROR", "USPEH")
-                emit(Resource(ResourceState.SUCCESS, it))
-            }
-        } catch (e: Exception) {
-            Log.e("ERRROR", e.message.toString())
-            emit(Resource(ResourceState.ERROR))
-        } finally {
-            Log.e("ERRROR", "HUEVO MENE")
-            setLoading(false)
         }
     }
+
 
     fun removeEvent(idEvent: Int) {
         try {
@@ -137,9 +167,12 @@ class EventViewModel(
         }
     }
 
-
     private fun setLoading(value: Boolean) {
         _isLoading.postValue(value)
+    }
+
+    fun clearUpdateResult(){
+        _updateEventResult.value = null
     }
 
     companion object {

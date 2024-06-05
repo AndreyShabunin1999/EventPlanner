@@ -1,4 +1,4 @@
-package com.anshabunin.hotelsapplication.core.domain.model
+package com.anshabunin.eventplanner.core.domain.model
 
 sealed class ResourceState {
     object LOADING : ResourceState()
